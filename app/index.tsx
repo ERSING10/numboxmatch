@@ -5,14 +5,19 @@ import { useGameLogic } from '../hooks/useGameLogic';
 import { styles } from './styles';
 
 export default function HomeScreen() {
-  const { board } = useGameLogic();
+  const { board, targetNumber, handleCellPress, selectedCells, errorCells } = useGameLogic();
 
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 20, color: '#333' }}>
-        Hedef Sayı: ?
+        Hedef Sayı: {targetNumber}
       </Text>
-      <Board board={board} />
+      <Board 
+        board={board} 
+        onCellPress={handleCellPress} 
+        selectedCells={selectedCells}
+        errorCells={errorCells} 
+      />
     </View>
   );
 }
