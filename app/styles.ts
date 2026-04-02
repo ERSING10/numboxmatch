@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
-import { BLOCK_SIZE } from './constants';
+import { Dimensions, StyleSheet } from 'react-native';
+const windowWidth = Dimensions.get('window').width;
+const safePadding = 50; 
+const CELL_SIZE = Math.floor((windowWidth - safePadding) / 8); 
 
 export const styles = StyleSheet.create({
   container: {
@@ -19,13 +21,13 @@ export const styles = StyleSheet.create({
     flexDirection: 'row', 
   },
   cell: {
-    width: BLOCK_SIZE, 
-    height: BLOCK_SIZE, 
+    width: CELL_SIZE,  // Dinamik genişlik
+    height: CELL_SIZE, // Dinamik yükseklik
     borderWidth: 1, 
-    borderColor: '#BDBDBD', // hücrelerin kendi aralarındaki ince çizgiler
+    borderColor: '#BDBDBD', 
     alignItems: 'center', 
     justifyContent: 'center',
-    margin: 1, // hücreler arasına boşluk
+    margin: 1, 
     borderRadius: 4, 
   },
   cellText: {
