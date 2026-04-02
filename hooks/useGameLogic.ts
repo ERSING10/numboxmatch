@@ -12,22 +12,37 @@ export const useGameLogic = () => {
   const [errorCells, setErrorCells] = useState<{r: number, c: number}[]>([]); // Hatalı seçilenler kırmızı olacak
   const [activeBlock, setActiveBlock] = useState<{r: number, c: number, value: number, color: string} | null>(null); // Havadan düşen blok
   const [tick, setTick] = useState<number>(0); // timer
+  const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
   useEffect(() => {
     initializeBoard();
     generateNewTarget();
   }, []);
 
-  //5000 / 8 (satır oldugu icin) = 625ms de bir aşağı kayar
+  // en üstte herhangi bi kare varsa biter
   useEffect(() => {
+    if (board.length > 0) {
+      const isTopRowOccupied = board[0].some(cell => cell !== null);
+      if (isTopRowOccupied) {
+        setIsGameOver(true);
+        setActiveBlock(null);
+      }
+    }
+  }, [board]);
+
+  // 5000 / 8 (satır oldugu icin) = 625ms de bir aşağı kayar
+  useEffect(() => {
+    if (isGameOver) return; 
     const timer = setInterval(() => {
       setTick(prev => prev + 1);
     }, 625); 
     return () => clearInterval(timer);
-  }, []);
+  }, [isGameOver]);
 
   // düsen blogun hareketi
   useEffect(() => {
+    if (isGameOver) return;
+
     if (!activeBlock) {
       const randomNum = Math.floor(Math.random() * 9) + 1;
       const randomCol = Math.floor(Math.random() * COLS);
@@ -48,7 +63,7 @@ export const useGameLogic = () => {
         setActiveBlock(prev => prev ? { ...prev, r: nextR } : null);
       }
     }
-  }, [tick]);
+  }, [tick,isGameOver]);
 
 // blokların patlaması ve kalan blokların asagı kayması
   useEffect(() => {
@@ -127,9 +142,19 @@ export const useGameLogic = () => {
     const newTarget = Math.floor(Math.random() * 21) + 10;
     setTargetNumber(newTarget);
   };
+
+  const restartGame = () => {
+    setIsGameOver(false);
+    setSelectedCells([]);
+    setErrorCells([]);
+    setActiveBlock(null);
+    initializeBoard();
+    generateNewTarget();
+  };
   
   //hücreye tıklama mantığı: Seçilen hücre zaten seçiliyse geri alma, değilse seçme. Maksimum 4 hücre seçilebilir ve sadece komşu hücreler seçilebilir.
   const handleCellPress = (r: number, c: number) => {
+    if (isGameOver) return;
     if (activeBlock && r === activeBlock.r && c === activeBlock.c) return;
 
     setSelectedCells((prev) => {
@@ -164,5 +189,5 @@ export const useGameLogic = () => {
     displayBoard[activeBlock.r][activeBlock.c] = { value: activeBlock.value, color: activeBlock.color };
   }
 
-  return { board: displayBoard, targetNumber, handleCellPress, selectedCells, errorCells };
+  return { board: displayBoard, targetNumber, handleCellPress, selectedCells, errorCells, isGameOver, restartGame };
 };
