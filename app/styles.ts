@@ -1,64 +1,73 @@
 import { Dimensions, StyleSheet } from 'react-native';
-const windowWidth = Math.min(Dimensions.get('window').width, 400); 
-const safePadding = 50; 
-const CELL_SIZE = Math.floor((windowWidth - safePadding) / 8);
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+
+// Sağ panel + boşluklar için ayrılan alan
+const SCORE_PANEL_WIDTH = 76;
+const SCORE_PANEL_MARGIN = 8;
+const H_PADDING = 16;          // sol + sağ kenar boşluğu
+const V_PADDING = 90;          // status bar + genel dikey boşluk
+const TARGET_TEXT_HEIGHT = 42; // "Hedef: X" satırının yüksekliği
+
+// Yatayda sığabilecek maksimum hücre boyutu (8 sütun)
+const maxCellByWidth = Math.floor(
+  (Math.min(screenWidth, 430) - SCORE_PANEL_WIDTH - SCORE_PANEL_MARGIN - H_PADDING) / 8
+);
+
+// Dikeyde sığabilecek maksimum hücre boyutu (10 satır)
+const maxCellByHeight = Math.floor(
+  (screenHeight - V_PADDING - TARGET_TEXT_HEIGHT) / 10
+) - 2; // margin payı
+
+// İkisinin minimumunu al, maksimum 40px ile sınırla
+export const CELL_SIZE = Math.min(maxCellByWidth, maxCellByHeight, 40);
+
+const FONT_SIZE = Math.max(11, Math.floor(CELL_SIZE * 0.52));
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    backgroundColor: '#FAFAFA', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
+    flex: 1,
+    backgroundColor: '#FAFAFA',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  gameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  boardColumn: {
+    alignItems: 'center',
+  },
+  targetText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 6,
+    color: '#333',
   },
   board: {
     borderWidth: 2,
-    borderColor: '#424242', 
-    backgroundColor: '#EEEEEE', 
+    borderColor: '#424242',
+    backgroundColor: '#EEEEEE',
     padding: 2,
-    borderRadius: 8, 
-  },
-  row: {
-    flexDirection: 'row', 
-  },
-  cell: {
-    width: CELL_SIZE,  // Dinamik genişlik
-    height: CELL_SIZE, // Dinamik yükseklik
-    borderWidth: 1, 
-    borderColor: '#BDBDBD', 
-    alignItems: 'center', 
-    justifyContent: 'center',
-    margin: 1, 
-    borderRadius: 4, 
-  },
-  cellText: {
-    fontSize: 22,
-    fontWeight: 'bold', 
-    color: '#333333',
-  },
-
-  overlay: {
-    position: 'absolute',
-    top: 0, bottom: 0, left: 0, right: 0,
-    backgroundColor: 'rgba(0,0,0,0.8)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 10, // Ekranın en üstünde dursun
-  },
-  gameOverText: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    color: '#ff4444',
-    marginBottom: 20,
-  },
-  restartButton: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 30,
-    paddingVertical: 15,
     borderRadius: 8,
   },
-  restartText: {
-    fontSize: 20,
+  row: {
+    flexDirection: 'row',
+  },
+  cell: {
+    width: CELL_SIZE,
+    height: CELL_SIZE,
+    borderWidth: 1,
+    borderColor: '#BDBDBD',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 1,
+    borderRadius: 4,
+  },
+  cellText: {
+    fontSize: FONT_SIZE,
     fontWeight: 'bold',
-    color: '#333',
-  }
+    color: '#333333',
+  },
 });
