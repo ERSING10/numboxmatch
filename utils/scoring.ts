@@ -32,7 +32,7 @@ export const getFallInterval = (totalScore: number): number => {
   if (totalScore >= 300) return 200;  // 2 sn
   if (totalScore >= 200) return 300;  // 3 sn
   if (totalScore >= 100) return 400;  // 4 sn
-  return 500;                          // 5 sn (başlangıç)
+  return 500;                         // 5 sn (başlangıç)
 };
 
 // Puana göre hız seviyesi (1-5)

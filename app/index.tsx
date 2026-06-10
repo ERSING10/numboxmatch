@@ -12,14 +12,14 @@ import { styles } from './styles';
 type GamePhase = 'start' | 'playing' | 'name_input' | 'leaderboard';
 
 export default function HomeScreen() {
+  
+  const [gamePhase, setGamePhase] = useState<GamePhase>('start');
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const {
     board, targetNumber, handleCellPress, selectedCells,
     errorCells, isGameOver, restartGame,
     totalScore, speedLevel, scoreToNext, wrongCount,
   } = useGameLogic();
-
-  const [gamePhase, setGamePhase] = useState<GamePhase>('start');
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
   // Oyun bitince isim ekranına geç
   useEffect(() => {
