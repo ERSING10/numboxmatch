@@ -90,7 +90,7 @@ export const useGameLogic = () => {
         }
       });
 
-      if (currentSum === targetNumber) {
+      if (currentSum === targetNumber && selectedCells.length >= 2) {
         console.log("Hedef vuruldu! Kutular patlıyor ve yerçekimi devreye giriyor...");
 
         // Hamle puanını hesapla ve toplam puana ekle
